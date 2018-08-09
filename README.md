@@ -8,8 +8,10 @@
 
 ## Start the app
 
-`npm run start`
+`yarn`
+
+`yarn start`
 
 ## Build the app
 
-`npm run build`
+`yarn build`
