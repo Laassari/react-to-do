@@ -96,9 +96,11 @@ class Todo extends React.Component {
         currState.dragedItemIndex,
         currState.dragedItemIndex + 1
       )[0];
-      todos[currState.dragedItemIndex] = '__temporary__';
+
+      const tempName = `__temporary__${Math.random()}`;
+      todos[currState.dragedItemIndex] = tempName;
       todos.splice(destIndex + 1, 0, dragedItem);
-      todos.splice(todos.indexOf('__temporary__'), 1);
+      todos.splice(todos.indexOf(tempName), 1);
       return { todos };
     });
   }
