@@ -1,17 +1,23 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 import Modal from './Modal';
+import './Todo.css';
 
 class Todo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      error: false
+      error: false,
+      dragedItemIndex: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.handleDragEnter = this.handleDragEnter.bind(this);
+    this.handleDragLeave = this.handleDragLeave.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
+    this.handleDragStart = this.handleDragStart.bind(this);
   }
 
   componentDidUpdate() {
@@ -43,7 +49,7 @@ class Todo extends React.Component {
     }
 
     this.setState(prevState => {
-      const todos = [...prevState.todos].concat(value);
+      const todos = [value, ...prevState.todos];
       return { todos };
     });
     event.target.item.value = '';
@@ -53,6 +59,46 @@ class Todo extends React.Component {
     this.setState(prevState => {
       const todos = [...prevState.todos];
       todos.splice(todos.indexOf(todo), 1);
+      return {
+        todos
+      };
+    });
+  }
+
+  handleDragStart(event) {
+    const itemIndex = event.target.dataset.index;
+    this.setState(() => ({ dragedItemIndex: itemIndex }));
+  }
+
+  handleDragEnter(event) {
+    event.preventDefault();
+    if (event.target.dataset.index !== this.state.dragedItemIndex)
+      event.target.classList.add('dragOver');
+
+    event.stopPropagation();
+  }
+
+  handleDragLeave(event) {
+    event.target.classList.remove('dragOver');
+    event.stopPropagation();
+  }
+
+  handleDrop(event) {
+    event.target.classList.remove('dragOver');
+
+    const destIndex = +event.target.dataset.index;
+
+    //move the dragedItem to it's new place in the array
+    this.setState(currState => {
+      const todos = [...currState.todos];
+
+      const dragedItem = todos.slice(
+        currState.dragedItemIndex,
+        currState.dragedItemIndex + 1
+      )[0];
+      todos[currState.dragedItemIndex] = '__temporary__';
+      todos.splice(destIndex + 1, 0, dragedItem);
+      todos.splice(todos.indexOf('__temporary__'), 1);
       return { todos };
     });
   }
@@ -63,19 +109,22 @@ class Todo extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <input type="text" name="item" autoComplete="off" />
         </form>
-        <div className="items">
+        <div className="items" onDrop={this.handleDrop}>
           {this.state.todos.length === 0 ? (
-            <p>nothing to do</p>
+            <p> nothing to do </p>
           ) : (
-            this.state.todos
-              .reverse()
-              .map(todo => (
-                <TodoItem
-                  deleteTodo={this.deleteTodo}
-                  key={todo}
-                  content={todo}
-                />
-              ))
+            this.state.todos.map((todo, index) => (
+              <TodoItem
+                handleDragStart={this.handleDragStart}
+                handleDragEnter={this.handleDragEnter}
+                handleDragLeave={this.handleDragLeave}
+                // handleDrop={() => 1 /*this.handleDrop*/}
+                index={index}
+                deleteTodo={this.deleteTodo}
+                key={todo}
+                content={todo}
+              />
+            ))
           )}
           {this.state.error && (
             <Modal id="modal" textError={this.state.error} />

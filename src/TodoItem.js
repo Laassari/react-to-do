@@ -21,7 +21,14 @@ class TodoItem extends React.Component {
 
   render() {
     return (
-      <p onClick={this.markDone}>
+      <p
+        onDragOver={this.props.handleDragEnter}
+        onDragStart={this.props.handleDragStart}
+        onDragLeave={this.props.handleDragLeave}
+        onClick={this.markDone}
+        draggable="true"
+        data-index={this.props.index}
+      >
         {this.props.content} is marked: {this.state.isDone.toString()}
         <b onClick={this.deletItem}>close</b>
       </p>
