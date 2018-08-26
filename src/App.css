@@ -1,4 +1,16 @@
 body {
   display: flex;
-  justify-content: center
+  justify-content: center;
+}
+
+#root {
+  margin-top: 15px;
+  max-width: 800px;
+  width: 100%;
+  border: 10px solid #003459;
+  border-radius: 11px;
+}
+
+h1 {
+  padding: 0 8px;
 }

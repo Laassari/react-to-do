@@ -1,0 +1,67 @@
+.items > p {
+  color: #fff;
+  background: #003459;
+  padding: 10px 64px 10px 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.items > p button {
+  color: #000;
+  background: #00a8e8;
+  position: absolute;
+  right: 0;
+  height: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  outline: none;
+  border: 0;
+}
+
+.items > p button:active {
+  box-shadow: inset -2px 1px 2px #0000004d, inset -2px 1px 7px #0000004d;
+}
+
+form {
+  text-align: center;
+}
+
+form input {
+  margin: 20px 0 0 0;
+  padding: 5px;
+  padding-left: 11px;
+  border-radius: 3px;
+  border: 1px solid #55555573;
+  box-shadow: 1px 1px 1px #00000042;
+  width: 80%;
+  font-size: 1.3rem;
+  color: #000000cf;
+}
+
+.dragOver {
+  opacity: 0.5;
+  padding-bottom: 35px !important;
+}
+
+.dragOver::after {
+  content: 'drop here...';
+  display: block;
+  width: 100%;
+  height: 30px;
+  background: black;
+  position: absolute;
+  bottom: 0;
+  color: #fff;
+  outline: 2px dashed red;
+  left: 0;
+  padding: 5px;
+}
