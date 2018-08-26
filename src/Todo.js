@@ -41,6 +41,9 @@ class Todo extends React.Component {
       return;
     }
 
+    //reset errors
+    this.setState(() => ({ error: false }));
+
     if (value.length === 0) {
       this.setState(() => ({
         error: 'Entry cannot be empty'
