@@ -109,18 +109,26 @@ class Todo extends React.Component {
     return (
       <div className="todo-app">
         <form onSubmit={this.handleSubmit}>
-          <input type="text" name="item" autoComplete="off" />
+          <input type="text" name="item" placeholder="Add a Todo" />
         </form>
         <div className="items" onDrop={this.handleDrop}>
           {this.state.todos.length === 0 ? (
-            <p> nothing to do </p>
+            <p>
+              nothing to do
+              <span
+                style={{ display: 'contents' }}
+                role="img"
+                aria-label="ghost emoji"
+              >
+                👻
+              </span>
+            </p>
           ) : (
             this.state.todos.map((todo, index) => (
               <TodoItem
                 handleDragStart={this.handleDragStart}
                 handleDragEnter={this.handleDragEnter}
                 handleDragLeave={this.handleDragLeave}
-                // handleDrop={() => 1 /*this.handleDrop*/}
                 index={index}
                 deleteTodo={this.deleteTodo}
                 key={todo}
