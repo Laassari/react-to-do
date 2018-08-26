@@ -30,7 +30,7 @@ class TodoItem extends React.Component {
         data-index={this.props.index}
       >
         {this.props.content} is marked: {this.state.isDone.toString()}
-        <b onClick={this.deletItem}>close</b>
+        <button onClick={this.deletItem}>delete</button>
       </p>
     );
   }
