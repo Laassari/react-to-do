@@ -123,6 +123,7 @@ class Todo extends React.Component {
                 role="img"
                 aria-label="ghost emoji"
               >
+                {' '}
                 👻
               </span>
             </p>
