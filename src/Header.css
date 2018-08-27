@@ -2,4 +2,33 @@ header {
   color: #00171f;
   background: #00a8e8;
   padding: 1px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+button {
+  background: hsla(197, 118%, 40%, 1);
+  border: 0;
+  border-radius: 2px;
+  padding: 3px 6px;
+  cursor: pointer;
+}
+
+.firebaseui-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: #00171f36;
+  z-index: 1;
+}
+#firebaseui_container {
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
