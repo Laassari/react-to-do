@@ -9,7 +9,8 @@ class Todo extends React.Component {
     this.state = {
       todos: [],
       error: false,
-      dragedItemIndex: false
+      dragedItemIndex: false,
+      markedTodos: []
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,6 +19,7 @@ class Todo extends React.Component {
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
+    this.markTodoComplete = this.markTodoComplete.bind(this);
   }
 
   componentDidUpdate() {
@@ -31,7 +33,7 @@ class Todo extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
+    
     const value = event.target.item.value.trim();
     if (this.state.todos.indexOf(value) > -1) {
       this.setState(() => ({
@@ -53,7 +55,9 @@ class Todo extends React.Component {
 
     this.setState(prevState => {
       const todos = [value, ...prevState.todos];
-      return { todos };
+      const markedTodos = [false, ...this.state.markedTodos];
+
+      return { todos, markedTodos };
     });
     event.target.item.value = '';
   }
@@ -65,6 +69,14 @@ class Todo extends React.Component {
       return {
         todos
       };
+    });
+  }
+
+  markTodoComplete(index, done) {
+    this.setState(currState => {
+      const markedTodos = [...currState.markedTodos];
+      markedTodos[index] = done;
+      return { markedTodos };
     });
   }
 
@@ -133,10 +145,12 @@ class Todo extends React.Component {
                 handleDragStart={this.handleDragStart}
                 handleDragEnter={this.handleDragEnter}
                 handleDragLeave={this.handleDragLeave}
+                markTodoComplete={this.markTodoComplete}
                 index={index}
                 deleteTodo={this.deleteTodo}
                 key={todo}
                 content={todo}
+                completed={this.state.markedTodos[index]}
               />
             ))
           )}
