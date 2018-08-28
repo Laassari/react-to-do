@@ -10,7 +10,9 @@ const TodoItem = props => (
     data-index={props.index}
   >
     {props.content} is marked: {props.completed.toString()}
-    <button onClick={() => props.deleteTodo(props.content)}>delete</button>
+    <button onClick={event => props.deleteTodo(event, props.content)}>
+      delete
+    </button>
   </p>
 );
 

@@ -7,10 +7,10 @@ class Todo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [],
+      todos: this.props.todos.items,
       error: false,
       dragedItemIndex: false,
-      markedTodos: []
+      markedTodos: this.props.todos.completed
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,9 +33,9 @@ class Todo extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    
+
     const value = event.target.item.value.trim();
-    if (this.state.todos.indexOf(value) > -1) {
+    if (this.props.todos.items.indexOf(value) > -1) {
       this.setState(() => ({
         error: 'Entry already exists'
       }));
@@ -53,31 +53,28 @@ class Todo extends React.Component {
       return;
     }
 
-    this.setState(prevState => {
-      const todos = [value, ...prevState.todos];
-      const markedTodos = [false, ...this.state.markedTodos];
+    const todos = [value, ...this.props.todos.items];
+    const markedTodos = [false, ...this.props.todos.completed];
+    this.props.updateTodos({ items: todos, completed: markedTodos });
 
-      return { todos, markedTodos };
-    });
     event.target.item.value = '';
   }
 
-  deleteTodo(todo) {
-    this.setState(prevState => {
-      const todos = [...prevState.todos];
-      todos.splice(todos.indexOf(todo), 1);
-      return {
-        todos
-      };
-    });
+  deleteTodo(event, todo) {
+    event.stopPropagation()
+    
+    const todos = [...this.props.todos.items];
+    const markedTodos = [...this.props.todos.completed];
+    todos.splice(todos.indexOf(todo), 1);
+    markedTodos.splice(todos.indexOf(todo), 1);
+    this.props.updateTodos({ items: todos, completed: markedTodos });
   }
 
   markTodoComplete(index, done) {
-    this.setState(currState => {
-      const markedTodos = [...currState.markedTodos];
-      markedTodos[index] = done;
-      return { markedTodos };
-    });
+    const todos = [...this.props.todos.items];
+    const markedTodos = [...this.props.todos.completed];
+    markedTodos[index] = done;
+    this.props.updateTodos({ items: todos, completed: markedTodos });
   }
 
   handleDragStart(event) {
@@ -127,7 +124,7 @@ class Todo extends React.Component {
           <input type="text" name="item" placeholder="Add a Todo" />
         </form>
         <div className="items" onDrop={this.handleDrop}>
-          {this.state.todos.length === 0 ? (
+          {this.props.todos.items.length === 0 ? (
             <p>
               nothing to do
               <span
@@ -140,7 +137,7 @@ class Todo extends React.Component {
               </span>
             </p>
           ) : (
-            this.state.todos.map((todo, index) => (
+            this.props.todos.items.map((todo, index) => (
               <TodoItem
                 handleDragStart={this.handleDragStart}
                 handleDragEnter={this.handleDragEnter}
@@ -150,7 +147,7 @@ class Todo extends React.Component {
                 deleteTodo={this.deleteTodo}
                 key={todo}
                 content={todo}
-                completed={this.state.markedTodos[index]}
+                completed={this.props.todos.completed[index]}
               />
             ))
           )}
