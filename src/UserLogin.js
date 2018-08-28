@@ -61,14 +61,19 @@ class UserLogin extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      !this.isArrayEqual(prevProps.todos.items, this.props.todos.items) ||
-      !this.isArrayEqual(prevProps.todos.completed, this.props.todos.completed)
-    ) {
-      //todos have changed. update the database
-      db.collection('Todos')
-        .doc(this.state.uid)
-        .set({ todos: this.props.todos });
+    if (this.state.uid) {
+      if (
+        !this.isArrayEqual(prevProps.todos.items, this.props.todos.items) ||
+        !this.isArrayEqual(
+          prevProps.todos.completed,
+          this.props.todos.completed
+        )
+      ) {
+        //todos have changed. update the database
+        db.collection('Todos')
+          .doc(this.state.uid)
+          .set({ todos: this.props.todos });
+      }
     }
   }
 
