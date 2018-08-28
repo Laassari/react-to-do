@@ -60,6 +60,15 @@ class UserLogin extends React.Component {
     return;
   }
 
+  componentDidUpdate(prevProps) {
+    if (!this.isArrayEqual(prevProps.todos.items, this.props.todos.items)) {
+      //todos have changed. update the database
+      db.collection('Todos')
+        .doc(this.state.uid)
+        .set({ todos: this.props.todos });
+    }
+  }
+
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -67,6 +76,15 @@ class UserLogin extends React.Component {
           const displayName = user.displayName || user.email;
           return { displayName, uid: user.uid };
         });
+        db.collection('Todos')
+          .doc(this.state.uid)
+          .get()
+          .then(value => {
+            const todos = value.data().todos;
+            const items = todos.items;
+            const completed = todos.completed;
+            this.props.updateTodos({ items, completed });
+          });
       } else {
         this.setState(() => ({ displayName: false, uid: false }));
       }
@@ -75,6 +93,13 @@ class UserLogin extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.dismissAuthUi);
+  }
+
+  isArrayEqual(arr1, arr2) {
+    return (
+      arr1.length === arr2.length &&
+      arr1.filter((el, index) => el !== arr2[index]).length === 0
+    );
   }
   render() {
     return (
