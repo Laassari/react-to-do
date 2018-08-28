@@ -1,25 +1,17 @@
 import React from 'react';
 
-class TodoItem extends React.Component {
-  render() {
-    return (
-      <p
-        onDragOver={this.props.handleDragEnter}
-        onDragStart={this.props.handleDragStart}
-        onDragLeave={this.props.handleDragLeave}
-        onClick={() =>
-          this.props.markTodoComplete(this.props.index, !this.props.completed)
-        }
-        draggable="true"
-        data-index={this.props.index}
-      >
-        {this.props.content} is marked: {this.props.completed.toString()}
-        <button onClick={() => this.props.deleteTodo(this.props.content)}>
-          delete
-        </button>
-      </p>
-    );
-  }
-}
+const TodoItem = props => (
+  <p
+    onDragOver={props.handleDragEnter}
+    onDragStart={props.handleDragStart}
+    onDragLeave={props.handleDragLeave}
+    onClick={() => props.markTodoComplete(props.index, !props.completed)}
+    draggable="true"
+    data-index={props.index}
+  >
+    {props.content} is marked: {props.completed.toString()}
+    <button onClick={() => props.deleteTodo(props.content)}>delete</button>
+  </p>
+);
 
 export default TodoItem;
