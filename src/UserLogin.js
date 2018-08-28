@@ -1,5 +1,5 @@
 import React from 'react';
-import { firebase } from './Firebase';
+import { firebase, db } from './Firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 class UserLogin extends React.Component {
@@ -42,20 +42,25 @@ class UserLogin extends React.Component {
       return;
     }
     this.setState(() => ({ showAuthWidget: true }));
+    document.addEventListener('keydown', this.dismissAuthUi);
   }
 
   //will be fired for click and keypress events
   dismissAuthUi(event) {
-    if (event.key === 'Escape')
+    if (event.key === 'Escape' && event.type === 'keydown') {
       this.setState(() => ({ showAuthWidget: false }));
-
-    if (!event.target.closest('#firebaseui_container'))
+      document.removeEventListener('keydown', this.dismissAuthUi);
+    } else if (
+      !event.target.closest('#firebaseui_container') &&
+      event.type === 'click'
+    ) {
       this.setState(() => ({ showAuthWidget: false }));
+      document.removeEventListener('keydown', this.dismissAuthUi);
+    }
+    return;
   }
 
   componentDidMount() {
-    document.addEventListener('keydown', this.dismissAuthUi);
-
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState(() => {
