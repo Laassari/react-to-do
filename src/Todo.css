@@ -9,6 +9,7 @@
   margin-right: 5px;
   align-items: center;
   cursor: pointer;
+  transition: opacity 0.15s ease-in;
 }
 
 .items > p button {
