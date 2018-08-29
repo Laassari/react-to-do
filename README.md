@@ -1,4 +1,4 @@
-# A TODO app built with React
+# A TODO app built with React and Firebase (Auth & Firestore)
 
 ## instalation:
 
