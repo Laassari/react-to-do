@@ -61,8 +61,8 @@ class Todo extends React.Component {
   }
 
   deleteTodo(event, todo) {
-    event.stopPropagation()
-    
+    event.stopPropagation();
+
     const todos = [...this.props.todos.items];
     const markedTodos = [...this.props.todos.completed];
     todos.splice(todos.indexOf(todo), 1);
@@ -98,23 +98,30 @@ class Todo extends React.Component {
   handleDrop(event) {
     event.target.classList.remove('dragOver');
 
-    const destIndex = +event.target.dataset.index;
+    const newIndex = +event.target.dataset.index;
 
-    //move the dragedItem to it's new place in the array
-    this.setState(currState => {
-      const todos = [...currState.todos];
+    //change index of draged item and it's completed state
+    const todos = this.moveItemInArray(
+      [...this.props.todos.items],
+      this.state.dragedItemIndex,
+      newIndex
+    );
+    const completed = this.moveItemInArray(
+      [...this.props.todos.completed],
+      this.state.dragedItemIndex,
+      newIndex
+    );
 
-      const dragedItem = todos.slice(
-        currState.dragedItemIndex,
-        currState.dragedItemIndex + 1
-      )[0];
-
-      const tempName = `__temporary__${Math.random()}`;
-      todos[currState.dragedItemIndex] = tempName;
-      todos.splice(destIndex + 1, 0, dragedItem);
-      todos.splice(todos.indexOf(tempName), 1);
-      return { todos };
+    this.props.updateTodos({
+      items: todos,
+      completed: completed
     });
+  }
+
+  moveItemInArray(array, oldIndex, newIndex) {
+    const arr = array.slice(0);
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+    return arr;
   }
 
   render() {
